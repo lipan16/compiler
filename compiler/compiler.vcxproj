@@ -18,6 +18,43 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DataType.cpp" />
+    <ClCompile Include="Env.cpp" />
+    <ClCompile Include="Expr.cpp" />
+    <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="Logical.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Op.cpp" />
+    <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="Stmt.cpp" />
+    <ClCompile Include="Token.cpp" />
+    <ClCompile Include="Word.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataType.h" />
+    <ClInclude Include="Env.h" />
+    <ClInclude Include="Expr.h" />
+    <ClInclude Include="Lexer.h" />
+    <ClInclude Include="Logical.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Op.h" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="Stmt.h" />
+    <ClInclude Include="Token.h" />
+    <ClInclude Include="Word.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="result.txt" />
+    <Text Include="source.txt" />
+    <Text Include="source1.txt" />
+    <Text Include="source2.txt" />
+    <Text Include="source3.txt" />
+    <Text Include="source4.txt" />
+    <Text Include="source5.txt" />
+    <Text Include="source6.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{7C61706F-70D8-4DD6-BFE9-650B8DEBB481}</ProjectGuid>
@@ -114,8 +151,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

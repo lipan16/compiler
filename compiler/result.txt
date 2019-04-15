@@ -1,0 +1,36 @@
+line:1		{
+line:2	KeyWord: int
+line:2	Word£ºi
+line:2		;
+line:3	KeyWord: float
+line:3	Word£ºj
+line:3		;
+line:4	Word£ºi
+line:4	Operater£º=
+line:4	Int Value£º0
+line:4		;
+line:5	Word£ºj
+line:5	Operater£º=
+line:5	Int Value£º8
+line:5		;
+line:6	Word£ºi
+line:6		+
+line:6		+
+line:6		;
+line:7	Word£ºj
+line:7		-
+line:7		-
+line:7		;
+line:8	KeyWord: while
+line:8		(
+line:8	KeyWord: true
+line:8		)
+line:9		{
+line:10	Word£ºj
+line:10		-
+line:10		-
+line:11		}
+line:12	Word£ºreturn
+line:12	Int Value£º0
+line:12		;
+line:13		}

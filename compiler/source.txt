@@ -1,0 +1,13 @@
+{
+	int i;
+	float j;
+	i=0;
+	j=8;
+	i++;
+	j--;
+	while(true) 
+	{
+		j--
+	}
+	return 0;
+}
