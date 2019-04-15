@@ -12,7 +12,7 @@ int main() {
 		exit(1);
 	}
 
-	Lexer *lex = new Lexer("source.txt");
+	Lexer *lex = new Lexer("source1.txt");
 
 	Token* tok;	do { tok = lex->scan();	} while (tok != NULL);
 
