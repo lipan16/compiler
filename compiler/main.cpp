@@ -12,11 +12,12 @@ int main() {
 		exit(1);
 	}
 
-	Lexer *lex = new Lexer("source1.txt");
+	Lexer *lex = new Lexer("sample.txt");
 
-	Token* tok;	do { tok = lex->scan();	} while (tok != NULL);
+	//Token* tok;	do { tok = lex->scan();	} while (tok != NULL);
 
-	//Parser parser(lex);	parser.program();
+	Parser parser(lex);	
+	parser.program();
 	cout << endl;
 	system("pause");
 	return 0;

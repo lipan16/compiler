@@ -6,16 +6,15 @@ using namespace std;
 
 extern std::ofstream io;
 
-class Node {
+class Node {//语法树中的节点类
 public:
-	Node(void);
-	virtual ~Node(void);
-	void error(string str);
-	int newLabel();
-	void emitLabel(int i);
-	void emit(string str);
-
 	int lexerLine;
 	static int label;
+	Node(void);
+
+	int newLabel();
+	void error(string str);
+	void emitLabel(int i);
+	void emit(string str);
 };
 

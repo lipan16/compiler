@@ -2,35 +2,173 @@ line:1		{
 line:2	KeyWord: int
 line:2	Word£ºi
 line:2		;
-line:3	KeyWord: float
+line:3	KeyWord: int
 line:3	Word£ºj
 line:3		;
-line:4	Word£ºi
-line:4	Operater£º=
-line:4	Int Value£º0
+line:4	KeyWord: float
+line:4	Word£ºv
 line:4		;
-line:5	Word£ºj
-line:5	Operater£º=
-line:5	Int Value£º8
+line:5	KeyWord: float
+line:5		[
+line:5	Int Value£º100
+line:5		]
+line:5	Word£ºa
 line:5		;
-line:6	Word£ºi
-line:6		+
-line:6		+
+line:6	KeyWord: float
+line:6	Word£ºx
 line:6		;
-line:7	Word£ºj
-line:7		-
-line:7		-
-line:7		;
 line:8	KeyWord: while
 line:8		(
 line:8	KeyWord: true
 line:8		)
 line:9		{
-line:10	Word£ºj
-line:10		-
-line:10		-
-line:11		}
-line:12	Word£ºreturn
-line:12	Int Value£º0
+line:10	KeyWord: do
+line:10	Word£ºi
+line:10	Operater£º=
+line:10	Word£ºi
+line:10	Operater£º+
+line:10	Int Value£º1
+line:10		;
+line:10	KeyWord: while
+line:10		(
+line:10	Word£ºa
+line:10		[
+line:10	Word£ºi
+line:10		]
+line:10	Operater£º<
+line:10	Word£ºv
+line:10		)
+line:10		;
+line:11	KeyWord: do
+line:11	Word£ºj
+line:11	Operater£º=
+line:11	Word£ºj
+line:11	Operater£º-
+line:11	Int Value£º1
+line:11		;
+line:11	KeyWord: while
+line:11		(
+line:11	Word£ºa
+line:11		[
+line:11	Word£ºj
+line:11		]
+line:11	Operater£º>
+line:11	Word£ºv
+line:11		)
+line:11		;
+line:12	KeyWord: if
+line:12		(
+line:12	Word£ºi
+line:12	Operater£º>=
+line:12	Word£ºj
+line:12		)
+line:12	KeyWord: break
 line:12		;
-line:13		}
+line:13	Word£ºx
+line:13	Operater£º=
+line:13	Word£ºa
+line:13		[
+line:13	Word£ºi
+line:13		]
+line:13		;
+line:14	Word£ºa
+line:14		[
+line:14	Word£ºi
+line:14		]
+line:14	Operater£º=
+line:14	Word£ºa
+line:14		[
+line:14	Word£ºj
+line:14		]
+line:14		;
+line:15	Word£ºa
+line:15		[
+line:15	Word£ºj
+line:15		]
+line:15	Operater£º=
+line:15	Word£ºx
+line:15		;
+line:16		}
+line:17		}
+
+
+/*** Begin Environment ***/
+
+Word£ºa
+Basic Type: []
+Offset: 12
+
+
+Word£ºi
+Basic Type: int
+Offset: 0
+
+
+Word£ºj
+Basic Type: int
+Offset: 4
+
+
+Word£ºv
+Basic Type: float
+Offset: 8
+
+
+Word£ºx
+Basic Type: float
+Offset: 412
+
+
+/*** End Environment ***/
+
+
+
+/*** Begin Environment ***/
+
+Word£ºa
+Basic Type: []
+Offset: 12
+
+
+Word£ºi
+Basic Type: int
+Offset: 0
+
+
+Word£ºj
+Basic Type: int
+Offset: 4
+
+
+Word£ºv
+Basic Type: float
+Offset: 8
+
+
+Word£ºx
+Basic Type: float
+Offset: 412
+
+
+/*** End Environment ***/
+
+L1:L4:	i = i + 1
+L6:	t1 = i * 4
+	t2 = a [ t1 ] 
+	if t2 < v goto L4
+L5:	j = j - 1
+L8:	t3 = j * 4
+	t4 = a [ t3 ] 
+	if t4 > v goto L5
+L7:	if !(i >= j) goto L9
+L10:	goto L3
+L9:	t5 = i * 4
+	x = a [ t5 ] 
+L11:	t6 = i * 4
+	t7 = j * 4
+	t8 = a [ t7 ] 
+	a [ t6 ] = t8
+L12:	t9 = j * 4
+	a [ t9 ] = x
+L13:	goto L1
+L3:L2:

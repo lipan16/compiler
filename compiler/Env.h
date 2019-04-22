@@ -5,13 +5,10 @@
 
 using namespace std;
 
-class Env {
+class Env {//把字符串词法单元映射为类ID的对象
 public:
 	Env(void);
 	Env(Env* p);
-
-	virtual ~Env(void);
-
 	void put(Word w, Id i);
 	Id get(const Word* w);
 	friend ostream& operator<<(ostream& os, const Env& env);
@@ -19,4 +16,3 @@ private:
 	Env *prev;
 	map<Word, Id> table;
 };
-

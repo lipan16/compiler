@@ -54,7 +54,7 @@ DataType* max(DataType* p1, DataType* p2) {
 	}
 }
 
-DataType* check(DataType* p1, DataType* p2) {
+DataType* check(DataType* p1, DataType* p2) {//检查一下两者类型是否一致
 	if (*p1 == *DataType::TypeBOOL && *p2 == *DataType::TypeBOOL) {
 		return DataType::TypeBOOL;
 	} else if (*p1 == *DataType::TypeINT && *p2 == *DataType::TypeINT) {

@@ -1,19 +1,19 @@
 #include "Parser.h"
 
-Parser::Parser(Lexer* l): p_lex(l), look(NULL), top(NULL), used(0) {
+Parser::Parser(Lexer* l): p_lex(l), look(NULL), top(NULL), used(0) {//以当前词法构造一个语法分析器
 	move();
 }
 
 
-void Parser::move() {
+void Parser::move() {//读下一个词法单元
 	look = p_lex->scan();
 }
 
-void Parser::error(string msg) {
+void Parser::error(string msg) {//错误输出
 	cerr << "Near Line " << p_lex->line << ": " << msg << endl;
 }
 
-void Parser::match(int t) {
+void Parser::match(int t) {//匹配
 	if ((int) look->t_tag == t) {
 		move();
 	} else {
@@ -21,14 +21,15 @@ void Parser::match(int t) {
 	}
 }
 
-void Parser::program() {
+void Parser::program() {//语法分析的开始，最大的语法单元program，program -> block
 	Stmt* s = block();
 
 	int begin = s->newLabel();
 	int after = s->newLabel();
-	s->emitLabel(begin);
+	s->emitLabel(begin);//输出标签 L1:
 	s->gen(begin, after);
-	s->emitLabel(after);
+	
+	//s->emitLabel(after);
 }
 
 Stmt* Parser::block() {
