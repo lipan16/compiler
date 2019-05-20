@@ -18,10 +18,6 @@ public:
 	Expr();
 	Expr(Token* tok, DataType* p);//以运算符和类型构造一个节点对象
 	bool operator==(const Expr& rhs);
-	virtual Expr* gen();//返回一个“项”，该项可以成为一个三地址指令的右部。如给定一个表达式E=E1+E2,方法gen返回一个项x1+x2，其中x1，x2存放E1，E2值的地址，如果这个对象是一个地址就返回this值
-	virtual Expr* reduce();//归约，把一个表达式计算成为一个单一的地址返回一个常量，标识符，或者临时名字
-	virtual void jumping(int t, int f);
-	virtual void emitJumps(string test, int t, int f);
 	virtual string toString() const;
 	friend ostream& operator<<(ostream& os, const Expr& expr);
 };
@@ -58,5 +54,4 @@ public:
 	Constant(Token* tok, DataType* p);//构造一个标号为tok，类型为p的叶子节点
 	Constant(int i);//重载，根据i创建一个常量对象
 	friend ostream& operator<<(ostream& os, const Constant& constant);//重载输出<<运算符
-	virtual void jumping(int t, int f);//布尔表达式的跳转
 };

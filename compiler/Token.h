@@ -5,10 +5,10 @@
 using namespace std;
 
 typedef enum tag {
-	AND = 256, BASIC, BREAK, DO, ELSE, EQ, FALSE, GE, IF, ID,
-	INDEX, LE, MINUS, NE, NUM, OR, REAL, TEMP, TRUE, WHILE, KEYWORD, OPERATION,
-	TAG_NULL
-	//类型划分：与运算，基本数据类型，break，do，else,==,false,>=,if,id,index,<=,min,-,!=,整数，或运算，实数，temp，true，while，关键字, 运算符, 定义空
+	BASIC = 256, BREAK, IF, ELSE, DO, WHILE, ID, INDEX, TRUE, FALSE,
+	OR, AND, EQ, NE, LE, GE, PP, AE, SS, SE, ME, DE, MINUS,
+	NUM, REAL, TEMP, KEYWORD, TAG_NULL
+	//类型划分：基本数据类型，break，if,else,do,while,id,index,true,false,||,&&,==,!=,<=,>=,++,+=,--,-=,*=,/=,-,数值，实数，temp，keyword，运算符，空
 } Tag; //其中index，temp为后面的语义分析作服务，and之所以从256开始是0-255给了ASCII编码的那些字符
 
 class Token {

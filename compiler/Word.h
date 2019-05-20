@@ -8,6 +8,7 @@ class Word: public Token {//单词类
 public:
 	string w_lexme;
 
+	Word();
 	Word(string str, Tag t);
 
 	virtual string toString() const;
@@ -15,14 +16,11 @@ public:
 	friend bool operator<(const Word& lhs, const Word& rhs);//重载<运算符
 	friend ostream& operator<<(ostream& os, const Word& word);
 
-	static Word* WordPLUS;//++
-	static Word* WordSUBS;//--
-	static Word* WordSE;//-=
-	static Word* WordADD;//+
-	static Word* WordAE;//+=
-	static Word* WordMUL;//*
-	static Word* WordME;//*=
-	static Word* WordDIV;// /
+	static Word* WordPLUS;// ++
+	static Word* WordSUBS;// --
+	static Word* WordAE;// +=
+	static Word* WordSE;// -=
+	static Word* WordME;// *=
 	static Word* WordDE;// /=
 	
 	static Word* WordAND;//&&
