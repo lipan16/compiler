@@ -30,25 +30,13 @@
     <ClCompile Include="Word.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Env.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Expr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Logical.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Op.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Stmt.cpp">
+    <ClCompile Include="Env.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Id.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,25 +53,13 @@
     <ClInclude Include="Word.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="Env.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Expr.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Logical.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Op.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="Stmt.h">
+    <ClInclude Include="Env.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Id.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

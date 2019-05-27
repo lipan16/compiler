@@ -22,18 +22,6 @@ ostream& operator<<(ostream& os, const DataType& type) {
 
 
 
-Array::Array(int sz, DataType* p):DataType("[]", INDEX, sz*p->d_width), a_size(sz), a_of(p) {
-
-}
-
-string Array::toString() const {
-	stringstream result;
-	result << "[ " << a_size << " ] " << a_of->toString();
-	return result.str();
-}
-
-
-
 bool DataType::numeric() const {//是否是数值型
 	if (*this == *DataType::TypeINT || *this == *DataType::TypeFLOAT || *this == *DataType::TypeCHAR) {
 		return true;

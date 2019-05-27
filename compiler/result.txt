@@ -3,34 +3,54 @@ line:2	KeyWord: int
 line:2	Word£ºi
 line:2		;
 line:3	KeyWord: int
-line:3	Word£ºsum
+line:3	Word£ºj
 line:3		;
-line:4	Word£ºi
-line:4	Operater£º=
-line:4	Int Value£º0
+line:4	KeyWord: float
+line:4	Word£ºv
 line:4		;
-line:5	Word£ºsum
-line:5	Operater£º=
-line:5	Int Value£º0
-line:5		;
-line:6	KeyWord: while
-line:6		(
-line:6	Word£ºi
-line:6	Operater£º<
-line:6	Int Value£º50
-line:6		)
-line:7		{
-line:8	Word£ºsum
-line:8	Operater£º=
-line:8	Word£ºsum
-line:8	Operater£º+
-line:8	Word£ºi
-line:8		;
-line:9	Word£ºi
-line:9	Operater£º=
-line:9	Word£ºi
-line:9	Operater£º+
-line:9	Int Value£º1
-line:9		;
-line:10		}
-line:11		}
+line:6	KeyWord: float
+line:6	Word£ºx
+line:6		;
+line:8	KeyWord: while
+line:8		(
+line:8	KeyWord: true
+line:8		)
+line:9		{
+line:10	KeyWord: do
+line:10	Word£ºi
+line:10	Operater£º=
+line:10	Word£ºi
+line:10	Operater£º+
+line:10	Int Value£º1
+line:10		;
+line:10	KeyWord: while
+line:10		(
+line:10	Word£ºi
+line:10	Operater£º<
+line:10	Word£ºj
+line:10		)
+line:10		;
+line:11	KeyWord: do
+line:11	Word£ºj
+line:11	Operater£º=
+line:11	Word£ºj
+line:11	Operater£º-
+line:11	Int Value£º1
+line:11		;
+line:11	KeyWord: while
+line:11		(
+line:11	Word£ºi
+line:11	Operater£º<
+line:11	Word£ºj
+line:11		)
+line:11		;
+line:12	KeyWord: if
+line:12		(
+line:12	Word£ºi
+line:12	Operater£º>=
+line:12	Word£ºj
+line:12		)
+line:12	KeyWord: break
+line:12		;
+line:13		}
+line:14		}

@@ -1,2 +1,6 @@
-﻿  main.cpp
+﻿  Env.cpp
+  Id.cpp
+  Parser.cpp
+  main.cpp
+  正在生成代码...
   compiler.vcxproj -> C:\Users\asus\Desktop\编译原理\compiler\Debug\compiler.exe

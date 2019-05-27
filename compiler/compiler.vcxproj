@@ -21,27 +21,19 @@
   <ItemGroup>
     <ClCompile Include="DataType.cpp" />
     <ClCompile Include="Env.cpp" />
-    <ClCompile Include="Expr.cpp" />
     <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="Logical.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Node.cpp" />
-    <ClCompile Include="Op.cpp" />
+    <ClCompile Include="Id.cpp" />
     <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Stmt.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataType.h" />
     <ClInclude Include="Env.h" />
-    <ClInclude Include="Expr.h" />
     <ClInclude Include="Lexer.h" />
-    <ClInclude Include="Logical.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Op.h" />
+    <ClInclude Include="Id.h" />
     <ClInclude Include="Parser.h" />
-    <ClInclude Include="Stmt.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>

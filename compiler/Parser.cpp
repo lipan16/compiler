@@ -22,17 +22,9 @@ void Parser::match(int t) {//匹配
 
 void Parser::program() {//语法分析的开始，最大的语法单元program，program -> block
 	syntax_node* root = makenode("program");
-
 	syntax_node* s = block();
 	root->son = s;
-
 	showtree(root, 0);
-	//int begin = s->newLabel();
-	//int after = s->newLabel();
-	//s->emitLabel(begin);//输出标签 L1:
-	//s->gen(begin, after);
-
-	//s->emitLabel(after);
 }
 
 syntax_node* Parser::block() {
@@ -44,19 +36,14 @@ syntax_node* Parser::block() {
 	tmp->son = makenode("{");
 	Env* savedEnv = top;//指向前面的符号表的连接
 	top = new Env(top);
-
 	tmp->bro = decls();
-
 	syntax_node *tmp1 = makenode("temp");
 	node->bro = tmp1;
 	tmp1->son = stmts();
-
 	match('}');
 	tmp1->bro = makenode("}");
-
 	//cout << *top;
 	//io << *top;
-
 	top = savedEnv;//存放最顶层的符号表
 	return node;
 }
@@ -99,22 +86,7 @@ DataType* Parser::type() {
 	}
 	DataType* p = new DataType(lookAsWord->w_lexme, lookAsWord->t_tag, width);//数据对象
 	match(BASIC);
-	if (look->t_tag != '[') {
-		return p;
-	} else {
-		return dims(p);//返回数组类型
-	}
-}
-
-DataType* Parser::dims(DataType* p) {
-	match('[');
-	Num *tok = (Num *) look;
-	match(NUM);
-	match(']');
-	if (look->t_tag == '[') {//多维数组
-		p = dims(p);
-	}
-	return new Array(tok->n_value, p);//构造数组
+	return p;
 }
 
 syntax_node* Parser::stmts() {
@@ -224,8 +196,8 @@ syntax_node* Parser::assign() {//赋值语句
 	s->son = tmp1;
 	tmp1->son = makenode(w->w_lexme);
 	if (look->t_tag == '=') {
-		move();
 		tmp1->bro = makenode("=");
+		move();
 		//Id *lhs = new Id(*id);//赋值表达式左边
 		syntax_node *rhs = boolExpr();//右边
 		s->bro = tmp2;
@@ -287,14 +259,9 @@ syntax_node* Parser::equality() {
 	node->son = x;
 	node->bro = tmp;
 	while (look->t_tag == EQ || look->t_tag == NE) {//== !=
+		string str = look->toString();
 		Token* tok = look;
 		move();
-		string str;
-		if (tok->t_tag == EQ) {
-			str = "==";
-		} else {
-			str = "!=";
-		}
 		syntax_node *tmp1 = makenode(str);
 		syntax_node *tmp2 = makenode("temp");
 		tmp->son = tmp1;
@@ -312,17 +279,12 @@ syntax_node* Parser::rel() {
 	syntax_node *node = makenode("rel");
 	syntax_node* x = expr();
 	node->son = x;
-	if (look->t_tag == '<' || look->t_tag == '>') {//比较
+	if (look->t_tag == '<' || look->t_tag == '>'||look->t_tag==GE ||look->t_tag==LE) {//比较
+		string str=look->toString();
 		Token* tok = look;
 		move();
 		syntax_node *tmp = makenode("temp");
 		node->bro = tmp;
-		string str;
-		if (look->t_tag == '<') {
-			str = "<";
-		} else {
-			str = ">";
-		}
 		tmp->son = makenode(str);
 		syntax_node *rhsExpr = expr();
 		tmp->bro = rhsExpr;

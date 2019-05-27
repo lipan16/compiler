@@ -4,10 +4,8 @@
 #include "Lexer.h"
 #include "Token.h"
 #include "DataType.h"
-//#include "syntaxtree.h"
-#include "Stmt.h"
 #include "Env.h"
-#include "Logical.h"
+
 
 using namespace std;
 
@@ -83,7 +81,6 @@ private:
 	void move();//读下一个词法单元
 	syntax_node* decls();//处理decls语法单元 decls -> decls decl |e
 	DataType* type();//处理type语法单元
-	DataType* dims(DataType* p);//处理数组类型
 	syntax_node* block();//处理block语法单元 block -> {decls stmts}
 	syntax_node* stmts();//处理stmts语法单元 stmts -> stmts stmt |e
 	syntax_node* stmt();//处理stmt语法单元
@@ -96,7 +93,6 @@ private:
 	syntax_node* term();//处理term语法单元
 	syntax_node* unary();//处理unary语法单元
 	syntax_node* factor();//处理factor语法单元
-	//Access* offset(Id* a);//计算数组地址
 
 	syntax_node* makenode(string);
 	void showtree(syntax_node*,int);

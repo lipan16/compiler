@@ -33,25 +33,3 @@ public:
 private:
 	int offset;//该标识符的相对地址
 };
-
-class Temp: public Expr {
-public:
-	static int count;
-
-	Temp(DataType* p);
-	virtual string toString() const;
-	friend ostream& operator<<(ostream& os, const Temp& temp);
-private:
-	int number;
-};
-
-
-class Constant: public Expr {
-public:
-	static Constant* ConstantTRUE;
-	static Constant* ConstantFALSE;
-
-	Constant(Token* tok, DataType* p);//构造一个标号为tok，类型为p的叶子节点
-	Constant(int i);//重载，根据i创建一个常量对象
-	friend ostream& operator<<(ostream& os, const Constant& constant);//重载输出<<运算符
-};
