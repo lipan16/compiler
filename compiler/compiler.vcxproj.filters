@@ -39,6 +39,21 @@
     <ClCompile Include="Id.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Expr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logical.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Op.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Stmt.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataType.h">
@@ -60,6 +75,21 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Id.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Expr.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logical.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Op.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Stmt.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

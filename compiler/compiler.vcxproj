@@ -21,19 +21,29 @@
   <ItemGroup>
     <ClCompile Include="DataType.cpp" />
     <ClCompile Include="Env.cpp" />
+    <ClCompile Include="Expr.cpp" />
     <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="Logical.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Id.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Op.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="Stmt.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataType.h" />
     <ClInclude Include="Env.h" />
+    <ClInclude Include="Expr.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Id.h" />
+    <ClInclude Include="Logical.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Op.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="Stmt.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>
@@ -52,32 +62,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{7C61706F-70D8-4DD6-BFE9-650B8DEBB481}</ProjectGuid>
     <RootNamespace>compiler</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>

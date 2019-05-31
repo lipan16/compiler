@@ -21,57 +21,41 @@ void Parser::match(int t) {//匹配
 }
 
 void Parser::program() {//语法分析的开始，最大的语法单元program，program -> block
-	syntax_node* root = makenode("program");
-	syntax_node* s = block();
-	root->son = s;
-	showtree(root, 0);
+	Stmt* s = block();
+
+	int begin = s->newLabel();
+	int after = s->newLabel();
+	s->emitLabel(begin);//输出标签 L1:
+	s->gen(begin, after);
+
+	//s->emitLabel(after);
 }
 
-syntax_node* Parser::block() {
-	syntax_node* node = makenode("block");
-
+Stmt* Parser::block() {
 	match('{');
-	syntax_node *tmp = makenode("temp");
-	node->son = tmp;
-	tmp->son = makenode("{");
 	Env* savedEnv = top;//指向前面的符号表的连接
 	top = new Env(top);
-	tmp->bro = decls();
-	syntax_node *tmp1 = makenode("temp");
-	node->bro = tmp1;
-	tmp1->son = stmts();
+	decls();
+	Stmt* s = stmts();
 	match('}');
-	tmp1->bro = makenode("}");
-	//cout << *top;
-	//io << *top;
+
+	cout << *top;
+	io << *top;
+
 	top = savedEnv;//存放最顶层的符号表
-	return node;
+	return s;
 }
 
-syntax_node* Parser::decls() {
-	syntax_node *node = makenode("decls");
-	syntax_node *tmp0 = node;
-
+void Parser::decls() {
 	while (look->t_tag == BASIC) {//当声明语句是基本类型int，float，char，bool
 		DataType* p = type();
 		Word* tokWord = (Word *) look;
-
-		syntax_node *tmp = makenode("decl");
-		tmp0->son = tmp;
-		tmp->son = makenode(p->toString());
-		syntax_node *tmp1 = makenode(tokWord->w_lexme);
-		tmp->bro = tmp1;
 		match(ID);//是否是标识符
 		match(';');
-		tmp1->son = makenode(";");
-		tmp0->bro = makenode("temp");
-		tmp0 = tmp0->bro;
-
 		Id id(tokWord, p, used);//以该数值构造一个叶子节点
 		top->put(*tokWord, id);//加入到字典中
 		used = used + p->d_width;//位置后移
 	}
-	return node;
 }
 
 DataType* Parser::type() {
@@ -86,308 +70,217 @@ DataType* Parser::type() {
 	}
 	DataType* p = new DataType(lookAsWord->w_lexme, lookAsWord->t_tag, width);//数据对象
 	match(BASIC);
-	return p;
-}
-
-syntax_node* Parser::stmts() {
-	if (look->t_tag == '}') {
-		return NULL;
+	if (look->t_tag != '[') {
+		return p;
 	} else {
-		syntax_node *node = makenode("stmts");
-		node->son = stmt();//一条语句
-		node->bro = stmts();//语句序列，递归，再次调用stmts
-		return node;
+		return dims(p);//返回数组类型
 	}
 }
 
-syntax_node* Parser::stmt() {//一条语句的处理
+DataType* Parser::dims(DataType* p) {
+	match('[');
+	Num *tok = (Num *) look;
+	match(NUM);
+	match(']');
+	if (look->t_tag == '[') {//多维数组
+		p = dims(p);
+	}
+	return new Array(tok->n_value, p);//构造数组
+}
+
+Stmt* Parser::stmts() {
+	if (look->t_tag == '}') {
+		return Stmt::StmtNULL;
+	} else {
+		Stmt *s = stmt();//一条语句
+		return new Seq(s, stmts());//语句序列，递归，再次调用stmts
+	}
+}
+
+Stmt* Parser::stmt() {//一条语句的处理
 	if (look->t_tag == ';') {//空语句
 		move();
-		return makenode(";");
+		return Stmt::StmtNULL;
 	} else if (look->t_tag == IF) {//if语句
 		match(IF);
 		match('(');
-
-		syntax_node *tmp = makenode("if");
-		tmp->son = makenode("(");
-		syntax_node *tmp1 = makenode("temp");
-		tmp->bro = tmp1;
-		syntax_node* x = boolExpr();//bool表达式
-		tmp1->son = x;//bool表达式
+		Expr* x = boolExpr();//bool表达式
 		match(')');
-		syntax_node*tmp2 = makenode("temp");
-		tmp2->son = makenode(")");
-		syntax_node* s1 = stmt();//为true时的语句
-		syntax_node*tmp3 = makenode("temp");
-		tmp2->bro = tmp3;
-		tmp3->son = s1;
-		tmp3->bro = NULL;
+		Stmt* s1 = stmt();//为true时的语句
 		if (look->t_tag != ELSE) {//if后没有else
-			return tmp;
+			return new If(x, s1);
 		}
 		match(ELSE);
-		syntax_node*tmp4 = makenode("else");
-		tmp3->bro = tmp4;
-		syntax_node* s2 = stmt();//false时 语句
-		tmp4->son = s2;
-		return tmp;
+		Stmt* s2 = stmt();//false时 语句
+		return new Else(x, s1, s2);//if后有else语句
 	} else if (look->t_tag == WHILE) {//while语句
+		While* whileNode = new While();;
+		Stmt* savedStmt = Stmt::Enclosing;
+		Stmt::Enclosing = whileNode;
 		match(WHILE);
 		match('(');
-		syntax_node *tmp = makenode("while");
-		tmp->son = makenode("(");
-
-		syntax_node* x = boolExpr();
-		syntax_node *tmp1 = makenode("temp");
-		tmp->bro = tmp1;
-		tmp1->son = x;//x
-		syntax_node *tmp2 = makenode("temp");
-		tmp1->bro = tmp2;
+		Expr* x = boolExpr();
 		match(')');
-		tmp2->son = makenode(")");
-		syntax_node* s = stmt();
-		tmp2->bro = s;
-		return tmp;
+		Stmt* s = stmt();
+		whileNode->init(x, s);
+		Stmt::Enclosing = savedStmt;
+		return whileNode;
 	} else if (look->t_tag == DO) {//do语句
+		Do* doNode = new Do();
+		Stmt* savedStmt = Stmt::Enclosing;
+		Stmt::Enclosing = doNode;
 		match(DO);
-		syntax_node *tmp = makenode("do");
-		syntax_node* s = stmt();
-		tmp->son = s;
+		Stmt* s = stmt();
 		match(WHILE);
-		syntax_node *tmp1 = makenode("while");
-		tmp->bro = tmp1;
 		match('(');
-		syntax_node *tmp2 = makenode("temp");
-		tmp1->son = tmp2;
-		tmp2->son = makenode("(");
-		syntax_node* x = boolExpr();
-		tmp2->bro = x;//x
+		Expr* x = boolExpr();
 		match(')');
 		match(';');
-		syntax_node * tmp3 = makenode("temp");
-		tmp1->bro = tmp3;
-		tmp3->son = makenode(")");
-		tmp3->bro = makenode(";");
-		return tmp;
+		doNode->init(x, s);
+		Stmt::Enclosing = savedStmt;
+		return doNode;
 	} else if (look->t_tag == BREAK) {//break语句
 		match(BREAK);
 		match(';');
-		syntax_node *tmp = makenode("break");
-		tmp->son = makenode(";");
-		return tmp;
+		return new Break();
 	} else if (look->t_tag == '{') {//块语句
-		syntax_node *tmp = block();//再次调用bolck()函数
-		return tmp;
+		return block();//再次调用bolck()函数
 	} else {
 		return assign();//赋值语句
 	}
 }
 
-syntax_node* Parser::assign() {//赋值语句
-	syntax_node* s = makenode("assign");
+Stmt* Parser::assign() {//赋值语句
+	Stmt* s = NULL;
 	Word* w = (Word*) look;//标识符
 	Id* id = new Id(top->get(w));
+
 	if (*id == *Id::IdNULL) {//在字典中未找到当前标识符
 		error(((Word *) look)->toString() + " Undeclared");
 	}
 	match(ID);
-	syntax_node *tmp1 = makenode("temp");
-	syntax_node* tmp2 = makenode("temp");
-	s->son = tmp1;
-	tmp1->son = makenode(w->w_lexme);
 	if (look->t_tag == '=') {
-		tmp1->bro = makenode("=");
 		move();
-		//Id *lhs = new Id(*id);//赋值表达式左边
-		syntax_node *rhs = boolExpr();//右边
-		s->bro = tmp2;
-		tmp2->son = rhs;
+		Id *lhs = new Id(*id);//赋值表达式左边
+		Expr *rhs = boolExpr();//右边
+		s = new Set(lhs, rhs);//设置为赋值运算，lhs=rhs
+	} else {//针对数组赋值
+		Access* x = offset(id);
+		match('=');
+		Expr *rhs = boolExpr();
+		s = new SetElem(x, rhs);
 	}
 	match(';');
-	tmp2->bro = makenode(";");
 	return s;
 }
 
-syntax_node* Parser::boolExpr() {//bool表达式，所有的表达式
-	syntax_node *node = makenode("boolexpr");
-	syntax_node *tmp = makenode("temp");
-	syntax_node* x = join();
-	node->son = x;//x
-	node->bro = tmp;
+Expr* Parser::boolExpr() {//bool表达式，所有的表达式
+	Expr* x = join();
 	while (look->t_tag == OR) {//或表达式
 		Token* tok = look;
 		move();
-		syntax_node *tmp1 = makenode("||");
-		syntax_node *tmp2 = makenode("temp");
-		tmp->son = tmp1;
-		tmp->bro = tmp2;
-		syntax_node *rhs = join();
-		tmp2->son = rhs;//rhs
-		syntax_node *tmp3 = makenode("temp");
-		tmp2->bro = tmp3;
-		tmp = tmp3;
+		Expr *rhs = join();
+		Or* orExpr = new Or(tok, x, rhs);
+		x = orExpr;
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::join() {
-	syntax_node *node = makenode("join");
-	syntax_node *tmp = makenode("temp");
-	syntax_node* x = equality();
-	node->son = x;
-	node->bro = tmp;
+Expr* Parser::join() {
+	Expr* x = equality();
 	while (look->t_tag == AND) {//and
 		Token* tok = look;
 		move();
-		syntax_node *tmp1 = makenode("&&");
-		syntax_node *tmp2 = makenode("temp");
-		tmp->son = tmp1;
-		tmp->bro = tmp2;
-		syntax_node *rhs = equality();
-		tmp2->son = rhs;
-		syntax_node *tmp3 = makenode("temp");
-		tmp2->bro = tmp3;
-		tmp = tmp3;
+		Expr *rhs = equality();
+		And *andExpr = new And(tok, x, rhs);
+		x = andExpr;
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::equality() {
-	syntax_node *node = makenode("equality");
-	syntax_node *tmp = makenode("temp");
-	syntax_node* x = rel();
-	node->son = x;
-	node->bro = tmp;
+Expr* Parser::equality() {
+	Expr* x = rel();
 	while (look->t_tag == EQ || look->t_tag == NE) {//== !=
-		string str = look->toString();
 		Token* tok = look;
 		move();
-		syntax_node *tmp1 = makenode(str);
-		syntax_node *tmp2 = makenode("temp");
-		tmp->son = tmp1;
-		tmp->bro = tmp2;
-		syntax_node *rhsExpr = rel();
-		tmp2->son = rhsExpr;
-		syntax_node *tmp3 = makenode("temp");
-		tmp2->bro = tmp3;
-		tmp = tmp3;
+		Expr *rhsExpr = rel();
+		Rel *rel = new Rel(tok, x, rhsExpr);
+		x = rel;
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::rel() {
-	syntax_node *node = makenode("rel");
-	syntax_node* x = expr();
-	node->son = x;
-	if (look->t_tag == '<' || look->t_tag == '>'||look->t_tag==GE ||look->t_tag==LE) {//比较
-		string str=look->toString();
+Expr* Parser::rel() {
+	Expr* x = expr();
+	if (look->t_tag == '<' || look->t_tag == '>' || look->t_tag == LE || look->t_tag == GE) {//比较
 		Token* tok = look;
 		move();
-		syntax_node *tmp = makenode("temp");
-		node->bro = tmp;
-		tmp->son = makenode(str);
-		syntax_node *rhsExpr = expr();
-		tmp->bro = rhsExpr;
+		Expr *rhsExpr = expr();
+		Rel *rel = new Rel(tok, x, rhsExpr);
+		return rel;
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::expr() {
-	syntax_node *node = makenode("expr");
-	syntax_node *tmp = makenode("temp");
-	syntax_node* x = term();
-	node->son = x;
-	node->bro = tmp;
-	while (look->t_tag == '+' || look->t_tag == '-') {
+Expr* Parser::expr() {
+	Expr* x = term();
+	while (look->t_tag == '+' || look->t_tag == '-' || look->t_tag == AE || look->t_tag == SE) {
 		Token* tok = look;
 		move();
-		string str;
-		if (look->t_tag == '+') {
-			str = "+";
-		} else {
-			str = "-";
-		}
-		syntax_node *tmp1 = makenode(str);
-		syntax_node *tmp2 = makenode("temp");
-		tmp->son = tmp1;
-		tmp->bro = tmp2;
-		syntax_node *rhs = expr();
-		tmp2->son = rhs;
-		syntax_node *tmp3 = makenode("temp");
-		tmp2->bro=tmp3;
-		tmp = tmp3;
+		Expr *rhs = expr();
+		Arith* temp = new Arith(tok, x, rhs);
+		x = temp;
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::term() {
-	syntax_node *node = makenode("expr");
-	syntax_node *tmp = makenode("temp");
-	syntax_node* x = unary();
-	node->son = x;
-	node->bro = tmp;
+Expr* Parser::term() {
+	Expr* x = unary();
 	while (look->t_tag == '*' || look->t_tag == '/') {
-		string str = look->toString();
 		Token* tok = look;
 		move();
-		syntax_node *tmp1 = makenode(str);
-		syntax_node *tmp2 = makenode("temp");
-		tmp->son = tmp1;
-		tmp->bro = tmp2;
-		syntax_node *rhs = unary();
-		tmp2->son = rhs;
-		syntax_node *tmp3 = makenode("temp");
-		tmp2->bro = tmp3;
-		tmp = tmp3;
+		Expr *rhs = unary();
+		x = new Arith(tok, x, rhs);
 	}
-	return node;
+	return x;
 }
 
-syntax_node* Parser::unary() {
-	syntax_node *node = makenode("unary");
+Expr* Parser::unary() {
 	if (look->t_tag == '-') {
 		move();
-		node->son = makenode("-");
-		syntax_node *rhs = unary();
-		node->bro = rhs;
-		return node;
+		Expr *rhs = unary();
+		return new Unary(Word::WordMINUS, rhs);
 	} else if (look->t_tag == '!') {
 		Token* tok = look;
 		move();
-		node->son = makenode("!");
-		syntax_node *rhs = unary();
-		node->bro = rhs;
-		return node;
+		Expr *rhs = unary();
+		return new Not(tok, rhs);
 	} else {
 		return factor();
 	}
 }
 
-syntax_node* Parser::factor() {
-	syntax_node *node = makenode("factor");
-	syntax_node *x = makenode("temp");
+Expr* Parser::factor() {
+	Expr *x = NULL;
 	if (look->t_tag == '(') {
 		move();
-		node->son=makenode("(");
-		node->bro = x;
-		x->son=boolExpr();
+		x = boolExpr();
 		match(')');
-		x->bro = makenode(")");
 		return x;
 	} else if (look->t_tag == NUM) {
-		x = makenode(look->toString());
+		x = new Constant(look, DataType::TypeINT);
 		move();
 		return x;
 	} else if (look->t_tag == REAL) {
-		x = makenode(look->toString());
+		x = new Constant(look, DataType::TypeFLOAT);
 		move();
 		return x;
 	} else if (look->t_tag == TRUE) {
 		move();
-		return makenode("true");
+		return new Constant(*Constant::ConstantTRUE);
 	} else if (look->t_tag == FALSE) {
 		move();
-		return makenode("false");
+		return new Constant(*Constant::ConstantFALSE);
 	} else if (look->t_tag == ID) {
 		string s = look->toString();
 		Word *w = (Word*) look;
@@ -396,34 +289,37 @@ syntax_node* Parser::factor() {
 			error(look->toString() + "Undeclared");
 		}
 		move();
-		x = makenode(s);
-		return x;
+		if (look->t_tag != '[') {
+			return new Id(*id);
+		} else {
+			return offset(id);
+		}
 	} else {
 		error("Syntax Error");
-		return NULL;
+		return new Expr(*Expr::ExprNULL);
 	}
 }
 
-syntax_node* Parser::makenode(string s) {
-	syntax_node* node = new syntax_node;
-	node->str = s;
-	node->lexerLine = p_lex->line;
-	node->bro = NULL;
-	node->son = NULL;
-	return node;
-}
+Access* Parser::offset(Id* a) {
+	Array* type = (Array *) a->type;
+	match('[');
+	Expr* index = boolExpr();
+	DataType* ofType = type->a_of;
+	Expr* w = new Constant(ofType->d_width);
+	Expr* t1 = new Arith(new Token('*'), index, w);
+	Expr* loc = t1;
+	Expr* t2 = NULL;
 
-static void PrintWhiteSpaces(int num) {
-	for (int i = 0; i < num; i++)
-		cout << "__";
-}
+	match(']');
 
-void Parser::showtree(syntax_node* root, int num) {
-	syntax_node * head = root;
-	if (head == NULL)
-		return;
-	PrintWhiteSpaces(num);
-	cout << head->str << endl;
-	showtree(head->son, num + 1);
-	showtree(head->bro, num + 1);
+	while (look->t_tag == '[') {
+		match('[');
+		index = boolExpr();
+		w = new Constant(ofType->d_width);
+		t1 = new Arith(new Token('*'), index, w);
+		t2 = new Arith(new Token('+'), loc, t1);
+		loc = t2;
+	}
+	Id *array = new Id(*a);
+	return new Access(array, loc, ofType);
 }

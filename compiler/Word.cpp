@@ -19,8 +19,6 @@ Word* Word::WordFALSE = new Word("false", FALSE);
 Word* Word::WordTEMP = new Word("temp", TEMP);
 Word* Word::WordNULL = new Word("null", TAG_NULL);
 
-Word::Word(){}
-
 Word::Word(string str, Tag t):Token(t), w_lexme(str) {}
 
 string Word::toString() const {

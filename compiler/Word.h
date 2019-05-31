@@ -8,7 +8,6 @@ class Word: public Token {//µ•¥ ¿‡
 public:
 	string w_lexme;
 
-	Word();
 	Word(string str, Tag t);
 
 	virtual string toString() const;
